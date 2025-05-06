@@ -11,7 +11,7 @@ Map::~Map()
 
 void Map::Init()
 {
-    m_texture = new sf::Texture("./img/pelouse.png", false, sf::IntRect({0,0}, {32, 32}));
+    m_texture = new sf::Texture("./img/Grass.png", false, sf::IntRect({0,0}, {32, 32}));
 
     m_tiles.reserve(m_width * m_height);
 
@@ -42,7 +42,7 @@ void Map::Draw(sf::RenderWindow* window)
 {
     for (int i = 0; i < m_tiles.size(); i++)
     {
-        window->draw(*m_tiles[i]);
+        window->draw(*m_tiles[i]); //TODO: optimise to draw only visible tiles
     }
 }
 
