@@ -10,6 +10,6 @@ public:
 
 	void Init(sf::Texture* texture, sf::Vector2f position)override;
 	void Release()override;
-	void Move()override;
+	void Move(float deltaTime)override;
 	void Shoot()override;
 };

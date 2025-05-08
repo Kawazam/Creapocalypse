@@ -9,7 +9,7 @@ public:
 
 	virtual void Init(sf::Texture* texture, sf::Vector2f position);
 	virtual void Release();
-	virtual void Move() = 0;
+	virtual void Move(float deltaTime) = 0;
 	virtual void Shoot() = 0;
 
 	inline void SetPosition(sf::Vector2f position) { m_sprite.setPosition(position); };

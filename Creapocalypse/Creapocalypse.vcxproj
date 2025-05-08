@@ -137,12 +137,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\MissileTower.cpp" />
+    <ClCompile Include="src\ShortRangeTower.cpp" />
+    <ClCompile Include="src\LongRangeTower.cpp" />
+    <ClCompile Include="src\Shot.cpp" />
+    <ClCompile Include="src\ShotSystem.cpp" />
     <ClCompile Include="src\AlienFactory.cpp" />
     <ClCompile Include="src\Alien.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\Map.cpp" />
     <ClCompile Include="src\GameManager.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Tower.cpp" />
+    <ClCompile Include="src\WallTower.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes\AlienFactory.h" />
@@ -150,6 +157,13 @@
     <ClInclude Include="includes\Entity.h" />
     <ClInclude Include="includes\GameManager.h" />
     <ClInclude Include="includes\Map.h" />
+    <ClInclude Include="includes\ShotSystem.h" />
+    <ClInclude Include="includes\Shot.h" />
+    <ClInclude Include="includes\Tower.h" />
+    <ClInclude Include="includes\LongRangeTower.h" />
+    <ClInclude Include="includes\ShortRangeTower.h" />
+    <ClInclude Include="includes\MissileTower.h" />
+    <ClInclude Include="includes\WallTower.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

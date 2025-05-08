@@ -19,6 +19,7 @@ void Entity::Release()
 {
 }
 
+//This functions are override by child class
 //void Entity::Move()
 //{
 //}

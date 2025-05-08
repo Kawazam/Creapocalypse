@@ -18,6 +18,10 @@ public:
 	void Release();
 	void Draw(sf::RenderWindow* window);
 
+	inline int GetWidth() const { return m_width; }
+	inline int GetHeight() const { return m_height; }
+
+private:
 	float m_width = 200;
 	float m_height = 200;
 

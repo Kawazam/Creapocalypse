@@ -17,7 +17,7 @@ void Alien::Release()
 {
 }
 
-void Alien::Move()
+void Alien::Move(float deltaTime)
 {
 }
 
