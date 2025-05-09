@@ -149,6 +149,7 @@
     <ClInclude Include="includes\Alien.h" />
     <ClInclude Include="includes\Entity.h" />
     <ClInclude Include="includes\GameManager.h" />
+    <ClInclude Include="includes\Globals.h" />
     <ClInclude Include="includes\Map.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
