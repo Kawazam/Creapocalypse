@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include "Alien.h"
+#include "TowerFactory.h"
 
 namespace sf { 
 	class RenderWindow;
@@ -34,4 +35,7 @@ protected:
 	sf::Vector2f m_cameraDirection;
 	std::list<Alien*> m_alienList;
 
+	TowerTypes m_selectedTowerType = TowerTypes::EXAMPLE1;
+	TowerFactory* m_towerFactory;
+	std::vector<Tower*> m_towerList;
 };

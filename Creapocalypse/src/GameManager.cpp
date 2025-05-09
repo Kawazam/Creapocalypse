@@ -4,7 +4,14 @@
 #include "Map.h"
 #include "AlienFactory.h"
 
-GameManager::GameManager()
+GameManager::GameManager() : 
+    m_window(nullptr),
+	m_map(nullptr),
+	m_alienFactory(nullptr),
+	m_towerFactory(nullptr),
+	m_cameraSpeed(10.0f),
+	m_cameraMoveInputAxes(0.0f, 0.0f),
+	m_cameraDirection(0.0f, 0.0f)
 {
 }
 
@@ -19,6 +26,10 @@ void GameManager::Init()
     m_map->Init();
     m_alienFactory = new AlienFactory();
     m_alienFactory->Init();
+    
+    m_towerFactory = new TowerFactory();
+    m_towerFactory->Init();
+
     m_window->setKeyRepeatEnabled(false);
 }
 
@@ -84,7 +95,14 @@ void GameManager::HandleInputs()
                 break;
             case sf::Keyboard::Key::Space:
                 SpawnAlienWave();
+            case sf::Keyboard::Key::Num1:
+                m_selectedTowerType = TowerTypes::EXAMPLE1;
+				break;
+            case sf::Keyboard::Key::Num2:
+				m_selectedTowerType = TowerTypes::EXAMPLE2;
+				break;
             }
+
             if (pressedKeyCode == sf::Keyboard::Key::Z ||
                 pressedKeyCode == sf::Keyboard::Key::Q ||
                 pressedKeyCode == sf::Keyboard::Key::S ||
@@ -120,6 +138,15 @@ void GameManager::HandleInputs()
                 hasCameraDirectionChanged = true;
             }
         }
+        // detect mouse click now
+        else if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())
+		{
+			if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+			{
+                sf::Vector2f spawnPosition = m_window->mapPixelToCoords(mouseButtonPressed->position);
+				m_towerList.push_back(m_towerFactory->CreateTower(m_selectedTowerType, spawnPosition));
+			}
+		}
     }
     if (hasCameraDirectionChanged)
     {
@@ -163,5 +190,39 @@ void GameManager::Release()
         delete m_map;
         m_map = nullptr;
     }
+
+    if (m_alienFactory != nullptr)
+	{
+		m_alienFactory->Release();
+		delete m_alienFactory;
+		m_alienFactory = nullptr;
+	}
+
+    if (m_towerFactory != nullptr)
+	{
+		m_towerFactory->Release();
+		delete m_towerFactory;
+		m_towerFactory = nullptr;
+	}
+
+	for (Tower* tower : m_towerList)
+	{
+        if (tower != nullptr)
+		{
+			tower->Release();
+            delete tower;
+		}
+	}
+	m_towerList.clear();
+
+	for (Alien* alien : m_alienList)
+	{
+        if (alien != nullptr)
+		{
+			alien->Release();
+			delete alien;
+		}
+	}
+	m_alienList.clear();
 
 }
