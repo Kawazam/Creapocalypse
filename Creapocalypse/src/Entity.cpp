@@ -1,7 +1,8 @@
 #include "Entity.h"
+#include "Globals.h"
 
 Entity::Entity() :
-	m_sprite(*(new sf::Texture()))
+	m_sprite(*GetNullTexture())
 {
 }
 

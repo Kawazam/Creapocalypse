@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Farmer.h"
+#include "Maths.h"
 
 Farmer::Farmer()
 {
@@ -23,6 +24,8 @@ void Farmer::Release()
 
 void Farmer::Move(float deltaTime)
 {
+	//cause an issue because m_destination is a Vector2i (set from mouse's position) and GetPosition() is a Vector2f.
+	//sf::Vector2f direction = Maths::Normalize(m_destination - GetPosition());
 }
 
 void Farmer::Shoot(float deltaTime)

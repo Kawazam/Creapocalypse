@@ -6,6 +6,7 @@
 #include "Map.h"
 #include "AlienFactory.h"
 #include "ShotSystem.h"
+#include "Farmer.h"
 //ADDING-------------------------------
 #include "ShortRangeTower.h"
 #include "LongRangeTower.h"
@@ -38,7 +39,6 @@ GameManager& GameManager::GetInstance()
 
 }
 
-
 void GameManager::Init()
 {
     m_window = new sf::RenderWindow(sf::VideoMode({ 800, 800 }), "SFML works!");
@@ -52,6 +52,8 @@ void GameManager::Init()
     m_alienFactory->Init();
     m_shotSystem = new ShotSystem();
     m_shotSystem->Init();
+    m_farmer = new Farmer();
+    //m_farmer->Init();
     //ADDING-------------------------------------------------------------------
     m_shortRangeTower = new ShortRangeTower();
     m_longRangeTower = new LongRangeTower();
@@ -92,6 +94,10 @@ void GameManager::Update()
     {
         alien->Move(elapsedSeconds);
         alien->Shoot(elapsedSeconds);
+    }
+    for (Tower* tower : m_towerList)
+    {
+        tower->Shoot(elapsedSeconds);
     }
 
     m_shotSystem->Update(elapsedSeconds);
@@ -206,8 +212,13 @@ void GameManager::HandleInputs()
 
             switch (pressedButton)
             {
-            case sf::Mouse::Button::Right:
+            case sf::Mouse::Button::Right:         //Spawn a tower
                 SpawnTower(m_towerType, position);
+                break;
+            case sf::Mouse::Button::Left:
+                m_farmer->SetDestination(position);
+                //m_farmer->Move(deltaTime);
+                //call Farmer::Move() and give it mouse position
                 break;
             }
         }

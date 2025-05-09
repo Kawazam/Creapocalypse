@@ -154,6 +154,7 @@
     <ClCompile Include="src\WallTower.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="includes\Globals.h" />
     <ClInclude Include="includes\Farmer.h" />
     <ClInclude Include="includes\AlienFactory.h" />
     <ClInclude Include="includes\Alien.h" />

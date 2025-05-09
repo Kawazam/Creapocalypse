@@ -25,6 +25,6 @@ protected:
 	float m_speed = 40.0f;
 	float m_currentShootCooldown = 0.0f;
 	float m_shootCooldownDuration = 1.0f;
-	float m_range = 100.0f;
+	float m_range = 1000.0f;
 };
 

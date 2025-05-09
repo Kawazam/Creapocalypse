@@ -12,6 +12,7 @@ namespace sf {
 class Map;
 class AlienFactory;
 class ShotSystem;
+class Farmer;
 //ADDING-------------------------------
 class ShortRangeTower;
 class LongRangeTower;
@@ -28,6 +29,7 @@ public:
 	static GameManager& GetInstance();
 
 	inline ShotSystem* GetShotSystem() { return m_shotSystem; };
+	inline std::list<Alien*> GetAliensList() { return m_alienList; };
 
 protected:
 	void Update();
@@ -40,6 +42,7 @@ protected:
 	Map* m_map;
 	AlienFactory* m_alienFactory;
 	ShotSystem* m_shotSystem;
+	Farmer* m_farmer;
 	//ADDING---------------------------
 	ShortRangeTower* m_shortRangeTower;
 	LongRangeTower* m_longRangeTower;
