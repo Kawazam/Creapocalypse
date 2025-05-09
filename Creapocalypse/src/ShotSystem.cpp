@@ -19,7 +19,7 @@ void ShotSystem::Release()
 
 void ShotSystem::Update(float deltaTime)
 {
-	for (Shot shot : m_shotList)
+	for (Shot& shot : m_shotList)
 	{
 		shot.Move(deltaTime);
 	}
@@ -29,4 +29,13 @@ void ShotSystem::CreateShot(sf::Vector2f spawnPosition, sf::Vector2f moveDirecti
 {
 	Shot& spawnedShot = m_shotList.emplace_back();
 	spawnedShot.Init(m_shotTexture, spawnPosition, moveDirection);
+	spawnedShot.SetSpeed(100.0f);
+}
+
+void ShotSystem::Draw(sf::RenderWindow* window)
+{
+	for (Shot& shot : m_shotList)
+	{
+		window->draw(*shot.GetDrawable());
+	}
 }

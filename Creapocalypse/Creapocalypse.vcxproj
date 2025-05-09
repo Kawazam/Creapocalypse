@@ -137,6 +137,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Maths.cpp" />
+    <ClCompile Include="src\Farmer.cpp" />
     <ClCompile Include="src\MissileTower.cpp" />
     <ClCompile Include="src\ShortRangeTower.cpp" />
     <ClCompile Include="src\LongRangeTower.cpp" />
@@ -152,6 +154,7 @@
     <ClCompile Include="src\WallTower.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="includes\Farmer.h" />
     <ClInclude Include="includes\AlienFactory.h" />
     <ClInclude Include="includes\Alien.h" />
     <ClInclude Include="includes\Entity.h" />
@@ -164,6 +167,7 @@
     <ClInclude Include="includes\ShortRangeTower.h" />
     <ClInclude Include="includes\MissileTower.h" />
     <ClInclude Include="includes\WallTower.h" />
+    <ClInclude Include="includes\Maths.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

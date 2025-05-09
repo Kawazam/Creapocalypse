@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
+#include <iostream>
 #include "GameManager.h"
+#include "Maths.h"
 #include "Map.h"
 #include "AlienFactory.h"
 #include "ShotSystem.h"
@@ -11,6 +13,11 @@
 #include "WallTower.h"
 //-------------------------------------
 
+namespace
+{
+    GameManager* s_instance = nullptr;
+}
+
 GameManager::GameManager()
 {
 }
@@ -18,6 +25,19 @@ GameManager::GameManager()
 GameManager::~GameManager()
 {
 }
+
+GameManager& GameManager::GetInstance()
+{
+    if (!s_instance) [[unlikely]]
+    {
+        s_instance = new GameManager();
+        s_instance->Init();
+        return *s_instance;
+    }
+    return *s_instance;
+
+}
+
 
 void GameManager::Init()
 {
@@ -30,6 +50,8 @@ void GameManager::Init()
     //m_window->setView(view);
     m_alienFactory = new AlienFactory();
     m_alienFactory->Init();
+    m_shotSystem = new ShotSystem();
+    m_shotSystem->Init();
     //ADDING-------------------------------------------------------------------
     m_shortRangeTower = new ShortRangeTower();
     m_longRangeTower = new LongRangeTower();
@@ -66,6 +88,12 @@ void GameManager::Update()
         MoveCamera(m_cameraDirection * m_cameraSpeed, elapsedSeconds);
     }
 
+    for (Alien* alien : m_alienList)
+    {
+        alien->Move(elapsedSeconds);
+        alien->Shoot(elapsedSeconds);
+    }
+
     m_shotSystem->Update(elapsedSeconds);
 
     m_window->clear();
@@ -75,12 +103,12 @@ void GameManager::Update()
     {
         m_window->draw(*alien->GetDrawable());
     }
-    //ADDING-------------------------------------------------------------------
+    //Draw every tower from m_towerList
     for (Tower* tower : m_towerList)
     {
         m_window->draw(*tower->GetDrawable());
     }
-    //-------------------------------------------------------------------------
+    m_shotSystem->Draw(m_window);
     m_window->display();
 }
 
@@ -119,20 +147,22 @@ void GameManager::HandleInputs()
             case sf::Keyboard::Key::Space:         //Run an alien wave
                 SpawnAlienWave();
                 break;
-            //ADDING-----------------------------------------------------------
-            case sf::Keyboard::Key::Num1:       //Select Short Range Tower
+            case sf::Keyboard::Key::Num1:          //Select Short Range Tower
                 m_towerType = 1;
+                std::cout << "Short range tower selected" << std::endl;
                 break;
-            case sf::Keyboard::Key::Num2:       //Select Long Range Tower
+            case sf::Keyboard::Key::Num2:          //Select Long Range Tower
                 m_towerType = 2;
+                std::cout << "Long range tower selected" << std::endl;
                 break;
-            case sf::Keyboard::Key::Num3:       //Select Missile Tower
+            case sf::Keyboard::Key::Num3:          //Select Missile Tower
                 m_towerType = 3;
+                std::cout << "Missile tower selected" << std::endl;
                 break;
-            case sf::Keyboard::Key::Num4:       //Select Wall Tower
+            case sf::Keyboard::Key::Num4:          //Select Wall Tower
                 m_towerType = 4;
+                std::cout << "Wall range tower selected" << std::endl;
                 break;
-            //-----------------------------------------------------------------
             }
             if (pressedKeyCode == sf::Keyboard::Key::Z ||
                 pressedKeyCode == sf::Keyboard::Key::Q ||
@@ -169,7 +199,6 @@ void GameManager::HandleInputs()
                 hasCameraDirectionChanged = true;
             }
         }
-        //ADDING---------------------------------------------------------------
         else if (const auto* buttonPressed = event->getIf<sf::Event::MouseButtonPressed>())
         {
             const sf::Mouse::Button pressedButton = buttonPressed->button;
@@ -182,19 +211,19 @@ void GameManager::HandleInputs()
                 break;
             }
         }
-        //---------------------------------------------------------------------
     }
     if (hasCameraDirectionChanged)
     {
-        const float magnitude = std::sqrt(m_cameraMoveInputAxes.x * m_cameraMoveInputAxes.x + m_cameraMoveInputAxes.y * m_cameraMoveInputAxes.y);
-        if (magnitude != 0)
-        {
-            m_cameraDirection = m_cameraMoveInputAxes / magnitude;
-        }
-        else
-        {
-            m_cameraDirection = { 0.0f,0.0f };
-        }
+        m_cameraDirection = Maths::Normalize(m_cameraMoveInputAxes);
+        //const float magnitude = std::sqrt(m_cameraMoveInputAxes.x * m_cameraMoveInputAxes.x + m_cameraMoveInputAxes.y * m_cameraMoveInputAxes.y);
+        //if (magnitude != 0)
+        //{
+        //    m_cameraDirection = m_cameraMoveInputAxes / magnitude;
+        //}
+        //else
+        //{
+        //    m_cameraDirection = { 0.0f,0.0f };
+        //}
     }
 }
 
@@ -221,20 +250,41 @@ void GameManager::MoveCamera(sf::Vector2f offset, float deltaTime)
 
 void GameManager::SpawnAlienWave()
 {
-    sf::Vector2f spawnPosition = m_window->getView().getCenter();
+    float tileSize = 32.0f;
+    float mapWidth = static_cast<float>(m_map->GetWidth()) * tileSize;
+    float mapHeight = static_cast<float>(m_map->GetHeight()) * tileSize;
+    sf::Vector2f spawnPosition;
+    int side = rand() % 4; //0: up, 1: right, 2: down, 3: left
+
+    switch (side)
+    {
+    case 0: //Up
+        spawnPosition = { static_cast<float>(rand() % static_cast<int>(mapWidth)), -tileSize };
+        break;
+    case 1: //Right
+        spawnPosition = { mapWidth + tileSize, static_cast<float>(rand() % static_cast<int>(mapHeight))};
+        break;
+    case 2: //Down
+        spawnPosition = { static_cast<float>(rand() % static_cast<int>(mapWidth)), mapHeight + tileSize };
+        break;
+    case 3: //Left
+        spawnPosition = { -tileSize, static_cast<float>(rand() % static_cast<int>(mapHeight))};
+        break;
+    }
+    //spawnPosition = m_window->getView().getCenter();
     Alien* alien = m_alienFactory->CreateRandomAlien(spawnPosition);
+    alien->SetDestination(/*m_window->getView().getCenter()*/{ mapWidth / 2, mapHeight / 2});
     m_alienList.push_back(alien);
 }
 
-//ADDING-----------------------------------------------------------------------
 void GameManager::SpawnTower(int towerType, sf::Vector2i position)
 {
-    //sf::Vector2i spawnPosition = sf::Mouse::getPosition(m_window);
     sf::Vector2f worldPosition = m_window->mapPixelToCoords(position);
+    //towerType = m_towerType;
 
     if (!m_shortRangeTower) return;
 
-    switch (m_towerType)
+    switch (towerType)
     {
     case 1:
     default:
@@ -263,7 +313,6 @@ void GameManager::SpawnTower(int towerType, sf::Vector2i position)
         break;
     }
 }
-//-----------------------------------------------------------------------------
 
 void GameManager::Release()
 {
@@ -279,11 +328,11 @@ void GameManager::Release()
         delete m_map;
         m_map = nullptr;
     }
-    //ADDING-----------------------------------
+
     for (Tower* tower : m_towerList)
     {
         delete tower;
     }
     m_towerList.clear();
-    //-----------------------------------------
 }
+

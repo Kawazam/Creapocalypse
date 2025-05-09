@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Tower.h"
 
 Tower::Tower()
@@ -19,8 +20,10 @@ void Tower::Release()
 
 void Tower::Move(float deltaTime)
 {
+	//Do nothing, if Move() is called write an error in the console
+	std::cerr << "Error: Move() called on Tower, which should be stationary!" << std::endl;
 }
 
-void Tower::Shoot()
+void Tower::Shoot(float deltaTime)
 {
 }
