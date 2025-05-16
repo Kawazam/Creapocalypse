@@ -6,8 +6,7 @@
 int main()
 {
 	std::srand(static_cast<unsigned>(std::time(nullptr)));
-	GameManager gameManager = GameManager();
-	gameManager.Init();
+	GameManager gameManager = GameManager::GetInstance();
 	gameManager.Run();
 	gameManager.Release();
 

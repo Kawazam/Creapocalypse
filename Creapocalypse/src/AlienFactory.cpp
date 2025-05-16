@@ -38,7 +38,8 @@ Alien* AlienFactory::CreateAlienTank(sf::Vector2f position)
 	Alien* alien = new Alien();
 	alien->Init(m_alienTankTexture, position);
 	alien->SetHealth(30);
-	alien->SetSpeed(0.1f);
+	alien->SetSpeed(40.0f);
+	alien->SetCoolDownDuration(2.0f);
 	return alien;
 }
 
@@ -47,7 +48,8 @@ Alien*  AlienFactory::CreateAlienRunner(sf::Vector2f position)
 	Alien* alien = new Alien();
 	alien->Init(m_alienRunnerTexture, position);
 	alien->SetHealth(5);
-	alien->SetSpeed(10.0f);
+	alien->SetSpeed(80.0f);
+	alien->SetCoolDownDuration(2.0f);
 	return alien;
 }
 

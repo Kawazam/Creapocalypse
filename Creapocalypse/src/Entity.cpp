@@ -1,7 +1,8 @@
 #include "Entity.h"
+#include "Globals.h"
 
 Entity::Entity() :
-	m_sprite(*(new sf::Texture()))
+	m_sprite(*GetNullTexture())
 {
 }
 
@@ -19,6 +20,7 @@ void Entity::Release()
 {
 }
 
+//This functions are override by child class
 //void Entity::Move()
 //{
 //}
